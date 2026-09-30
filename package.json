@@ -1,0 +1,9 @@
+{
+  "name": "firesentry-karhutla-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Dependency untuk script Node.js lokal (scripts/buat-akun-massal.mjs). Situsnya sendiri tetap HTML/CSS/JS murni, TIDAK butuh npm install untuk dijalankan/dideploy.",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

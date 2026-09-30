@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id" class="ews-cek-auth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analisis Risiko — FireSentry Karhutla</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  .tabel-judul{text-align:center;font-size:13.5px;margin:6px 0 10px;color:var(--text-900);}
+  table.tabel-risiko{width:100%;border-collapse:collapse;font-size:13px;text-align:center;}
+  table.tabel-risiko th,table.tabel-risiko td{border:1px solid #1e2c4a;padding:8px 12px;color:var(--text-900);}
+  table.tabel-risiko thead th{background:#e5e9f2;font-weight:700;}
+  table.tabel-risiko td.kiri{text-align:left;}
+  table.tabel-risiko tr.baris-kota td{font-weight:700;background:#f1f4fa;}
+  table.tabel-risiko .kls-Tinggi{color:#b91c1c;font-weight:700;}
+  table.tabel-risiko .kls-Sedang{color:#b45309;font-weight:700;}
+  table.tabel-risiko .kls-Rendah{color:#15803d;font-weight:700;}
+  .tabel-sumber{font-size:12px;font-style:italic;margin:6px 0 14px;color:var(--text-600);}
+  .penjelasan-risiko{font-size:13.5px;line-height:1.75;color:var(--text-700);text-align:justify;}
+  .penjelasan-risiko p{margin:0 0 8px;}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <div id="sidebar-mount"></div>
+
+  <main class="main">
+    <div id="topbar-mount"></div>
+
+
+    <div class="grid grid-4" style="margin-bottom:18px;" id="kpi-mount"></div>
+
+    <div class="card" style="margin-bottom:18px;">
+      <div class="card-head">
+        <div class="card-head-left">
+          <h3>🗺️ Peta Kawasan Rawan Bencana (KRB) <span id="judul-layer">Kebakaran Hutan &amp; Lahan</span></h3>
+          <span class="tag">Klasifikasi 3 kelas dari raster indeks risiko, Kota Pekanbaru</span>
+        </div>
+        <div class="legend" style="align-items:center;">
+          <select id="pilih-layer" class="input" style="padding:7px 10px;border-radius:8px;border:1px solid var(--border);font-size:12.5px;font-weight:600;"></select>
+          <span class="legend-item"><span class="legend-dot" style="background:#dc2626;"></span>Tinggi</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#f59e0b;"></span>Sedang</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#22c55e;"></span>Rendah</span>
+          <span class="legend-item"><span class="legend-dot" style="background:rgba(30,44,74,.18);border:1.5px solid #1e2c4a;"></span>Batas Kecamatan</span>
+          <label class="legend-item" style="cursor:pointer;user-select:none;">
+            <input type="checkbox" id="toggle-raster" style="width:auto;margin:0;" checked>
+            Tampilkan overlay raster
+          </label>
+        </div>
+      </div>
+      <div id="map-krb" style="height:520px;border-radius:var(--radius-md);"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px;">
+      <div class="card-head">
+        <div class="card-head-left">
+          <h3>📋 Kelas Risiko Bencana per Kecamatan</h3>
+          <span class="tag">Penjelasan peta kelas risiko Kebakaran Hutan &amp; Lahan, Kota Pekanbaru</span>
+        </div>
+      </div>
+
+      <p class="tabel-judul"><strong>Tabel</strong> Kelas Risiko Bencana Kebakaran Hutan dan Lahan di Kota Pekanbaru</p>
+      <div class="table-wrap">
+        <table class="tabel-risiko">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Kecamatan</th>
+              <th>Kelas Bahaya</th>
+              <th>Kelas Kerentanan</th>
+              <th>Kelas Kapasitas</th>
+              <th>Kelas Risiko</th>
+            </tr>
+          </thead>
+          <tbody id="tabel-risiko-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/batas-kecamatan.js"></script>
+<script src="assets/js/risiko-krb.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-config.js"></script>
+<script src="assets/js/components.js"></script>
+<script>
+  ewsInitPage("risiko", { title:"Analisis Risiko", subtitle:"Peta Kawasan Rawan Bencana (KRB) & skor risiko per kecamatan, bersumber dari data geospasial 4 Risiko.gdb" });
+
+  /* ---------- Dropdown pilihan layer ---------- */
+  const select = document.getElementById("pilih-layer");
+  RISIKO_KRB_LAYERS.forEach(l => {
+    const opt = document.createElement("option");
+    opt.value = l.key;
+    opt.textContent = l.label;
+    select.appendChild(opt);
+  });
+  select.value = "kebakaran";
+
+  /* ---------- Peta Leaflet ---------- */
+  const map = L.map("map-krb").setView([EWS_CONFIG.koordinatPekanbaru.lat, EWS_CONFIG.koordinatPekanbaru.lng], 11);
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P',
+    maxZoom: 19
+  }).addTo(map);
+
+  let overlayRaster = null;
+  let layerBatas = null;
+
+  function cariBaris(kecamatan){
+    return TABEL_RISIKO_KECAMATAN.find(r => r.kecamatan === kecamatan);
+  }
+
+  function gambarUlang(layerKey){
+    const cfg = RISIKO_KRB_LAYERS.find(l => l.key === layerKey);
+    if(!cfg) return;
+
+    document.getElementById("judul-layer").textContent = cfg.label;
+
+    if(overlayRaster) map.removeLayer(overlayRaster);
+    if(document.getElementById("toggle-raster").checked){
+      overlayRaster = L.imageOverlay(cfg.file, cfg.bounds, { opacity: 0.85, interactive: false }).addTo(map);
+    }
+
+    if(layerBatas) map.removeLayer(layerBatas);
+    layerBatas = L.geoJSON(BATAS_KECAMATAN_PEKANBARU, {
+      style: (feature) => {
+        const baris = cariBaris(feature.properties.kecamatan);
+        let kelas = baris ? baris[layerKey + "_kelas"] : null;
+        if(layerKey === "kebakaran"){ const k = krbKarhutlaKecamatan(feature.properties.kecamatan); kelas = barisKecamatan(feature.properties.kecamatan).risiko; }
+        return { color: "#1e2c4a", weight: 1.6, opacity: 0.75, fillColor: krbWarnaKelas(kelas), fillOpacity: 0.12 };
+      },
+      onEachFeature: (feature, layer) => {
+        const baris = cariBaris(feature.properties.kecamatan);
+        const skor = baris ? baris[layerKey] : null;
+        const kelas = baris ? baris[layerKey + "_kelas"] : null;
+        layer.bindTooltip(feature.properties.kecamatan, { permanent: false, direction: "center" });
+        if(layerKey === "kebakaran"){
+          const k = krbKarhutlaKecamatan(feature.properties.kecamatan);
+          const f1 = v => v.toFixed(1).replace(".", ",");
+          layer.bindPopup(k && k.ada ? `
+            <strong>Kec. ${feature.properties.kecamatan}</strong><br>
+            Rata-rata skor indeks (info): <b>${k.skor !== null ? String(k.skor).replace(".", ",") : "—"}</b><br>
+            Luas: Tinggi <b>${f1(k.pTinggi)}%</b> · Sedang <b>${f1(k.pSedang)}%</b> · Rendah <b>${f1(k.pRendah)}%</b><br>
+            Kelas Risiko: <b>${k.kelas}</b>` : `
+            <strong>Kec. ${feature.properties.kecamatan}</strong><br>
+            Tidak ada data raster yang representatif (area terbangun).<br>
+            Kelas Risiko: <b>${baris && baris.kebakaran_kelas ? baris.kebakaran_kelas : "—"}</b>`);
+        } else layer.bindPopup(`
+          <strong>Kec. ${feature.properties.kecamatan}</strong><br>
+          Indeks ${cfg.label}: <b>${skor !== null && skor !== undefined ? skor : "Data terbatas"}</b><br>
+          Kelas Risiko: <b>${kelas || "—"}</b>
+        `);
+        layer.on("mouseover", () => layer.setStyle({ fillOpacity: 0.32, weight: 2.4 }));
+        layer.on("mouseout", () => layer.setStyle({ fillOpacity: 0.12, weight: 1.6 }));
+      }
+    }).addTo(map);
+
+    renderKpi(cfg);
+  }
+
+  /* ---------- Kartu KPI persentase luas kelas ---------- */
+  function renderKpi(cfg){
+    const mount = document.getElementById("kpi-mount");
+    mount.innerHTML = `
+      <div class="card stat-card">
+        <div class="stat-top"><span class="stat-label">Kelas Tinggi</span><span class="stat-icon">🔴</span></div>
+        <div class="stat-value">${cfg.pctTinggi}<span class="unit">% luas</span></div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-top"><span class="stat-label">Kelas Sedang</span><span class="stat-icon">🟠</span></div>
+        <div class="stat-value">${cfg.pctSedang}<span class="unit">% luas</span></div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-top"><span class="stat-label">Kelas Rendah</span><span class="stat-icon">🟢</span></div>
+        <div class="stat-value">${cfg.pctRendah}<span class="unit">% luas</span></div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-top"><span class="stat-label">Skor Maksimum</span><span class="stat-icon">📈</span></div>
+        <div class="stat-value">${cfg.max}<span class="unit">/ 1,00</span></div>
+      </div>`;
+  }
+
+  /* ---------- Tabel 3.52: Kelas Risiko Karhutla per Kecamatan (diturunkan dari peta) ---------- */
+  const daftar = arr => arr.length <= 1 ? arr.join("") : arr.slice(0, -1).join(", ") + " dan " + arr[arr.length - 1];
+  const NILAI = { Rendah: 1, Sedang: 2, Tinggi: 3 };
+  const kelasDariIndeks = v => v < 1.5 ? "Rendah" : (v < 3 ? "Sedang" : "Tinggi");
+  const KAPASITAS = "Sedang";  /* asumsi tetap: tidak ada data kapasitas di 4 Risiko.gdb */
+
+  /* Kerentanan diturunkan dari matriks Risiko = Bahaya x Kerentanan / Kapasitas, agar konsisten dengan Kelas Risiko peta */
+  function turunkanKerentanan(bahaya, risiko){
+    const urut = [risiko, "Sedang", "Tinggi", "Rendah"];
+    for(const v of urut){
+      if(kelasDariIndeks(NILAI[bahaya] * NILAI[v] / NILAI[KAPASITAS]) === risiko) return v;
+    }
+    return risiko;
+  }
+
+  function barisKecamatan(nama){
+    const baris = cariBaris(nama);
+    const k = krbKarhutlaKecamatan(nama);
+    const estimasi = !(k && k.ada);
+    const risiko = estimasi ? (baris ? baris.kebakaran_kelas : null) : k.kelas;
+    const bahaya = baris && baris.kekeringan_kelas ? baris.kekeringan_kelas : "Sedang";
+    return { nama, bahaya, kapasitas: KAPASITAS, risiko, estimasi, rentan: risiko ? turunkanKerentanan(bahaya, risiko) : null };
+  }
+
+  function sel(kelas, tanda){ return kelas ? `<span class="kls-${kelas}">${kelas}${tanda || ""}</span>` : "—"; }
+
+  function renderTabel(){
+    const tbody = document.getElementById("tabel-risiko-body");
+    const kecamatan = BATAS_KECAMATAN_PEKANBARU.features.map(f => f.properties.kecamatan).sort((a, b) => a.localeCompare(b, "id"));
+    const data = kecamatan.map(barisKecamatan);
+
+    let html = data.map((r, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td class="kiri">${r.nama}</td>
+        <td>${sel(r.bahaya)}</td>
+        <td>${sel(r.rentan)}</td>
+        <td>${sel(r.kapasitas)}</td>
+        <td>${sel(r.risiko)}</td>
+      </tr>`).join("");
+
+    /* Baris Kota: kelas dominan dari raster/layer seluruh kota (kartu KPI peta) */
+    const dom = c => c.pctTinggi >= c.pctSedang && c.pctTinggi >= c.pctRendah ? "Tinggi" : (c.pctSedang >= c.pctRendah ? "Sedang" : "Rendah");
+    const cfgK = RISIKO_KRB_LAYERS.find(l => l.key === "kebakaran");
+    const cfgD = RISIKO_KRB_LAYERS.find(l => l.key === "kekeringan");
+    const kota = { bahaya: dom(cfgD), kapasitas: KAPASITAS, risiko: dom(cfgK) };
+    kota.rentan = turunkanKerentanan(kota.bahaya, kota.risiko);
+    html += `
+      <tr class="baris-kota">
+        <td colspan="2">Kota Pekanbaru</td>
+        <td>${sel(kota.bahaya)}</td>
+        <td>${sel(kota.rentan)}</td>
+        <td>${sel(kota.kapasitas)}</td>
+        <td>${sel(kota.risiko)}</td>
+      </tr>`;
+    tbody.innerHTML = html;
+  }
+
+  select.addEventListener("change", (e) => gambarUlang(e.target.value));
+  document.getElementById("toggle-raster").addEventListener("change", () => gambarUlang(select.value));
+
+  gambarUlang("kebakaran");
+  renderTabel();
+</script>
+</body>
+</html>
