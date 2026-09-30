@@ -18,6 +18,7 @@ const MENU_UTAMA = [
 ];
 const MENU_DATA = [
   { key:"laporan", label:"Laporan", icon:"📄", href:"laporan.html" },
+  { key:"password", label:"Ganti Password", icon:"🔑", href:"ganti-password.html" },
 ];
 
 /* ---------- Auth guard — Supabase Auth + tabel profiles ----------
