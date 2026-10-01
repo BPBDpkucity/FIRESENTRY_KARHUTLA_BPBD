@@ -77,13 +77,6 @@ const KELURAHAN_ACUAN = {
 
 const URUTAN_RISIKO = { Rendah: 0, Sedang: 1, Tinggi: 2 };
 
-// === MODE UJI SEMENTARA — HAPUS SETELAH TES ===
-// Memaksa SATU kecamatan menjadi "Sedang" agar alur Telegram otomatis bisa dites
-// tanpa membanjiri grup dengan 15 pesan.
-const UJI_KECAMATAN = "Tenayan Raya";
-const UJI_RISIKO = "Sedang";
-// === AKHIR MODE UJI ===
-
 function hitungRisiko(suhu, kelembapan, hotspot) {
   let skor = 0;
   if (suhu >= 35) skor += 2;
@@ -378,8 +371,7 @@ async function main() {
     }
     cuacaSemua[kecamatan] = cuaca;
     const hotspot = hotspotPerKecamatan[kecamatan] || 0;
-    let risikoBaru = hitungRisiko(cuaca.suhu, cuaca.kelembapan, hotspot);
-    if (kecamatan === UJI_KECAMATAN) risikoBaru = UJI_RISIKO; // MODE UJI
+    const risikoBaru = hitungRisiko(cuaca.suhu, cuaca.kelembapan, hotspot);
     statusBaru[kecamatan] = { risiko: risikoBaru, suhu: cuaca.suhu, kelembapan: cuaca.kelembapan, hotspot, waktuCek: sekarangIso };
     const risikoLama = risikoDariEntriLama(statusLama[kecamatan]);
     const naik = URUTAN_RISIKO[risikoBaru] > URUTAN_RISIKO[risikoLama];
