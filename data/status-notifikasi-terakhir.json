@@ -105,7 +105,7 @@
     "waktuCek": "2026-11-21T00:19:34.908Z"
   },
   "_meta": {
-    "diperbaruiPada": "2026-11-21T00:19:34.908Z",
+    "diperbaruiPada": "2026-11-21T07:26:57.241Z",
     "sumber": "GitHub Actions terjadwal (BMKG + NASA FIRMS NRT)",
     "firmsSources": [
       "VIIRS_SNPP_NRT",
@@ -113,8 +113,24 @@
       "VIIRS_NOAA21_NRT"
     ],
     "firmsJumlah": 0,
-    "firmsDiperbaruiPada": "2026-11-21T00:19:34.908Z",
-    "kecamatanGagal": [],
+    "firmsDiperbaruiPada": "2026-11-21T07:26:57.241Z",
+    "kecamatanGagal": [
+      "Pekanbaru Kota",
+      "Tenayan Raya",
+      "Rumbai",
+      "Rumbai Barat",
+      "Rumbai Timur",
+      "Kulim",
+      "Bukit Raya",
+      "Marpoyan Damai",
+      "Payung Sekaki",
+      "Tuah Madani",
+      "Binawidya",
+      "Sukajadi",
+      "Sail",
+      "Lima Puluh",
+      "Senapelan"
+    ],
     "riwayatEskalasi": [
       {
         "kecamatan": "Tenayan Raya",
