@@ -1,5 +1,5 @@
 {
-  "diperbaruiPada": "2026-11-23T02:18:18.036Z",
+  "diperbaruiPada": "2026-11-23T10:55:35.556Z",
   "sumber": [
     "VIIRS_SNPP_NRT",
     "VIIRS_NOAA20_NRT",
@@ -7,6 +7,24 @@
   ],
   "area": "101.30,0.40,101.60,0.60",
   "dayRange": 1,
-  "jumlah": 0,
-  "titik": []
+  "jumlah": 1,
+  "titik": [
+    {
+      "latitude": "0.44181",
+      "longitude": "101.54127",
+      "bright_ti4": "327.71",
+      "scan": "0.48",
+      "track": "0.48",
+      "acq_date": "2026-11-23",
+      "acq_time": "614",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "version": "2.0NRT",
+      "bright_ti5": "291.13",
+      "frp": "3.12",
+      "daynight": "D",
+      "firms_source": "VIIRS_NOAA21_NRT"
+    }
+  ]
 }
