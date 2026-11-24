@@ -1,119 +1,119 @@
 {
   "Pekanbaru Kota": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 97,
+    "suhu": 28,
+    "kelembapan": 85,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Tenayan Raya": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
-    "hotspot": 1,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "suhu": 28,
+    "kelembapan": 84,
+    "hotspot": 0,
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Rumbai": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
+    "suhu": 28,
+    "kelembapan": 85,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Rumbai Barat": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 99,
+    "suhu": 28,
+    "kelembapan": 85,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Rumbai Timur": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
+    "suhu": 28,
+    "kelembapan": 84,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Kulim": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 99,
+    "suhu": 28,
+    "kelembapan": 89,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Bukit Raya": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
+    "suhu": 28,
+    "kelembapan": 87,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Marpoyan Damai": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 97,
+    "suhu": 28,
+    "kelembapan": 86,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Payung Sekaki": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
+    "suhu": 28,
+    "kelembapan": 85,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Tuah Madani": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
+    "suhu": 28,
+    "kelembapan": 86,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Binawidya": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 97,
+    "suhu": 28,
+    "kelembapan": 85,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Sukajadi": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
+    "suhu": 28,
+    "kelembapan": 86,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Sail": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
+    "suhu": 28,
+    "kelembapan": 86,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Lima Puluh": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
+    "suhu": 28,
+    "kelembapan": 86,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "Senapelan": {
     "risiko": "Rendah",
-    "suhu": 24,
-    "kelembapan": 98,
+    "suhu": 28,
+    "kelembapan": 86,
     "hotspot": 0,
-    "waktuCek": "2026-11-23T22:28:14.503Z"
+    "waktuCek": "2026-11-24T06:18:35.639Z"
   },
   "_meta": {
-    "diperbaruiPada": "2026-11-23T22:28:14.503Z",
+    "diperbaruiPada": "2026-11-24T06:18:35.639Z",
     "sumber": "GitHub Actions terjadwal (BMKG + NASA FIRMS NRT)",
     "firmsSources": [
       "VIIRS_SNPP_NRT",
       "VIIRS_NOAA20_NRT",
       "VIIRS_NOAA21_NRT"
     ],
-    "firmsJumlah": 1,
-    "firmsDiperbaruiPada": "2026-11-23T22:28:14.503Z",
+    "firmsJumlah": 0,
+    "firmsDiperbaruiPada": "2026-11-24T06:18:35.639Z",
     "kecamatanGagal": [],
     "riwayatEskalasi": [
       {
